@@ -1,10 +1,10 @@
-package com.example.transmittalreview.service;
+package com.example.transmittalreview.model.service;
 
-import com.example.transmittalreview.dao.Settings;
-import com.example.transmittalreview.entities.BOM;
-import com.example.transmittalreview.entities.Drawing;
-import com.example.transmittalreview.entities.Dxf;
-import com.example.transmittalreview.entities.TransmittalPageLayout;
+import com.example.transmittalreview.model.dao.Settings;
+import com.example.transmittalreview.model.entities.BOM;
+import com.example.transmittalreview.model.entities.Drawing;
+import com.example.transmittalreview.model.entities.Dxf;
+import com.example.transmittalreview.model.dao.TransmittalPageLayout;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -99,6 +99,9 @@ public class TransmittalService {
         Pattern pattern = Pattern.compile("[A-Za-z]");
         Matcher matcher = pattern.matcher("");
         revision = stringFromCell(revisionCell);
+        if (revision.contains("NEW")){
+            revision = "0";
+        }
         matcher.reset(revision);
         StringBuilder fullname = new StringBuilder();
         if (name != null && !name.isEmpty()){
@@ -106,7 +109,7 @@ public class TransmittalService {
         }
         fullname.append(number);
         if (matcher.matches()){
-            fullname.append("_rev_").append(revision);
+            fullname.append("_REV_").append(revision);
         }
         
         return new Drawing(fullname.toString(), name, number, revision, "");
@@ -117,15 +120,15 @@ public class TransmittalService {
         
         String dxfCellValue = stringFromCell(row.getCell(page.getNumberColumn()));
         String dxfNumber = dxfNumberFromCell(dxfCellValue);
-        String partNumber = dxfNumber; //TODO method to parse part no.
+        String partNumber = dxfNumber.substring(0,6) + "D"; //TODO method to parse part no.
         String revisionLevel = stringFromCell(row.getCell(page.getRevisionColumn()));
         StringBuilder fullName = new StringBuilder(partNumber);
         Pattern pattern = Pattern.compile("[1-9]+");
         if (pattern.matcher(revisionLevel).matches()){
-            fullName.append("_rev_").append(revisionLevel);
+            fullName.append("_REV_").append(revisionLevel);
         }
         fullName.append(".dxf");
-        return new Dxf(fullName.toString(), partNumber, dxfNumber, revisionLevel);
+        return new Dxf(fullName.toString(), partNumber, dxfNumber, revisionLevel, "");
     }
     
     private String dxfNumberFromCell(String cellValue){

@@ -1,7 +1,7 @@
-package com.example.transmittalreview.service;
+package com.example.transmittalreview.model.service;
 
-import com.example.transmittalreview.entities.BOM;
-import com.example.transmittalreview.entities.Drawing;
+import com.example.transmittalreview.model.entities.BOM;
+import com.example.transmittalreview.model.entities.Drawing;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -34,13 +34,8 @@ public class BOMService {
         //Group 0 full, Group 1 / 5 Strip _ for name, Group 3 is for optional, Group 4 rev level
         Pattern pattern = Pattern.compile("(\\w*)?(\\d{6}[Dd])(_rev_(\\w))?(\\w*)?", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(input);
-        Set<String> drawings = new HashSet<>();
         while (matcher.find()) {
-            drawings.add(matcher.group());
-        }
-
-        for (String drawing: drawings){
-            result.add(parseSingleDrawing(drawing));
+            result.add(parseSingleDrawing(matcher.group()));
         }
         this.bom = new BOM(result);
     }

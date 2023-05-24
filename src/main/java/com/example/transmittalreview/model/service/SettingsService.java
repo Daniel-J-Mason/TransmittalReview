@@ -1,6 +1,6 @@
-package com.example.transmittalreview.service;
+package com.example.transmittalreview.model.service;
 
-import com.example.transmittalreview.dao.Settings;
+import com.example.transmittalreview.model.dao.Settings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

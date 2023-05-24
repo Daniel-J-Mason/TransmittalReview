@@ -10,12 +10,12 @@ module com.example.transmittalreview {
     
     exports com.example.transmittalreview;
     exports com.example.transmittalreview.controllers;
-    exports com.example.transmittalreview.service;
-    exports com.example.transmittalreview.entities;
-    exports com.example.transmittalreview.dao;
-    opens com.example.transmittalreview.service to com.google.gson;
-    opens com.example.transmittalreview.dao to com.google.gson;
+    exports com.example.transmittalreview.model.service;
+    exports com.example.transmittalreview.model.entities;
+    exports com.example.transmittalreview.model.dao;
+    opens com.example.transmittalreview.model.service to com.google.gson;
+    opens com.example.transmittalreview.model.dao to com.google.gson;
     opens com.example.transmittalreview to javafx.fxml;
     opens com.example.transmittalreview.controllers to javafx.fxml;
-    opens com.example.transmittalreview.entities to com.google.gson;
+    opens com.example.transmittalreview.model.entities to com.google.gson;
 }

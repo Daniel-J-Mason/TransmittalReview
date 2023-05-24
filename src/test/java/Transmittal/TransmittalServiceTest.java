@@ -1,13 +1,13 @@
 package Transmittal;
 
-import com.example.transmittalreview.dao.Settings;
-import com.example.transmittalreview.entities.BOM;
-import com.example.transmittalreview.service.SettingsService;
-import com.example.transmittalreview.service.TransmittalService;
-import org.junit.jupiter.api.BeforeAll;
+import com.example.transmittalreview.model.dao.Settings;
+import com.example.transmittalreview.model.entities.BOM;
+import com.example.transmittalreview.model.service.BOMService;
+import com.example.transmittalreview.model.service.ComparisonReport;
+import com.example.transmittalreview.model.service.SettingsService;
+import com.example.transmittalreview.model.service.TransmittalService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 
 import java.io.File;
 
@@ -26,7 +26,10 @@ public class TransmittalServiceTest {
         File file = new File(getClass().getResource("/transmittalreview/Transmittal/0000_Test_Excel.xlsm").getFile());
         TransmittalService transmittalService = new TransmittalService(file, settings);
         BOM bom = transmittalService.getBom();
-        bom.getParts().forEach(x -> System.out.println(x.getFullName()));
-        bom.getTextFiles().forEach(x -> System.out.println(x.getFullName()));
+        File bomFile = new File(getClass().getResource("/transmittalreview/BOM/test.bom.1").getFile());
+        BOMService bomService = new BOMService(bomFile);
+        BOM bom2 = bomService.getBom();
+        ComparisonReport comparisonReport = new ComparisonReport(bom, bom2);
+        comparisonReport.report().forEach(element -> System.out.println(element.getFullName() + " %"+ element.getRevisionLevel() + ": " + element.getStatus()));
     }
 }

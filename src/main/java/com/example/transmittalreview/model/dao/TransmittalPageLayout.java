@@ -1,4 +1,4 @@
-package com.example.transmittalreview.entities;
+package com.example.transmittalreview.model.dao;
 
 import java.util.ArrayList;
 import java.util.List;

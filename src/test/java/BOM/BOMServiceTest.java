@@ -1,5 +1,7 @@
-import com.example.transmittalreview.entities.Drawing;
-import com.example.transmittalreview.service.BOMService;
+package BOM;
+
+import com.example.transmittalreview.model.entities.Drawing;
+import com.example.transmittalreview.model.service.BOMService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

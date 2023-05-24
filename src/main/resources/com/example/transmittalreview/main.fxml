@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20.0" stylesheets="@styles/dark-theme.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transmittalreview.controllers.MainViewController">
+    <padding>
+        <Insets bottom="20.0" />
+    </padding>
+   <MenuBar>
+     <menus>
+       <Menu mnemonicParsing="false" text="File">
+         <items>
+           <MenuItem mnemonicParsing="false" text="Close" />
+         </items>
+       </Menu>
+       <Menu mnemonicParsing="false" text="Edit">
+         <items>
+           <MenuItem mnemonicParsing="false" text="Delete" />
+         </items>
+       </Menu>
+       <Menu mnemonicParsing="false" text="Help">
+         <items>
+           <MenuItem mnemonicParsing="false" text="About" />
+         </items>
+       </Menu>
+     </menus>
+   </MenuBar>
+   <HBox VBox.vgrow="ALWAYS">
+      <children>
+         <VBox HBox.hgrow="ALWAYS">
+            <children>
+               <HBox>
+                  <children>
+                     <Button fx:id="firstSelectFile" mnemonicParsing="false" onAction="#firstSelectFileClicked" text="Select File" />
+                     <Button fx:id="firstClipboard" mnemonicParsing="false" onAction="#firstClipboardClicked" text="Clipboard" />
+                  </children>
+               </HBox>
+               <TableView fx:id="firstTableView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                 <columns>
+                   <TableColumn fx:id="firstPartNumberColumn" editable="false" prefWidth="199.0" sortable="false" text="Part Number" />
+                   <TableColumn fx:id="firstFlagColumn" editable="false" minWidth="0.0" prefWidth="200.0" sortable="false" text="Exists?" />
+                 </columns>
+               </TableView>
+               <Button mnemonicParsing="false" text="Button" />
+            </children>
+         </VBox>
+         <VBox HBox.hgrow="ALWAYS">
+            <children>
+               <HBox>
+                  <children>
+                     <Button fx:id="secondSelectFile" mnemonicParsing="false" onAction="#secondSelectFileClicked" text="Select File" />
+                     <Button fx:id="secondClipboard" mnemonicParsing="false" onAction="#secondClipboardClicked" text="Clipboard" />
+                  </children>
+               </HBox>
+               <TableView fx:id="secondTableView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                  <columns>
+                     <TableColumn fx:id="secondPartNumberColumn" editable="false" prefWidth="199.0" sortable="false" text="Part Number" />
+                     <TableColumn fx:id="secondFlagColumn" editable="false" minWidth="0.0" prefWidth="200.0" sortable="false" text="Exists?" />
+                  </columns>
+               </TableView>
+               <Button mnemonicParsing="false" text="Button" />
+            </children>
+         </VBox>
+      </children>
+   </HBox>
+   <Label text="Label" />
+</VBox>

@@ -1,12 +1,9 @@
-package com.example.transmittalreview.dao;
-
-import com.example.transmittalreview.entities.TransmittalPageLayout;
+package com.example.transmittalreview.model.dao;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.List;
-import java.util.TreeMap;
-
+//TODO: Split transmittal settings and configuration settings into two files. One for comparison one for app
 public class Settings {
     private String engineeringWorkingFolder;
     private String drawingsFolder;
