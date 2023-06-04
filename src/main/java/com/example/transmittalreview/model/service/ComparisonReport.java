@@ -1,86 +1,83 @@
 package com.example.transmittalreview.model.service;
 
 import com.example.transmittalreview.model.entities.*;
-import javafx.util.Pair;
+import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-
+@Data
 public class ComparisonReport {
-    private BOM original;
-    private BOM comparison;
     
-    public ComparisonReport(BOM original, BOM comparison){
-        this.original = original;
-        this.comparison = comparison;
-    }
+    private ComparisonReport(){}
     
-    public List<Part> report(){
-        List<Part> result = new ArrayList<>(original.getDrawings());
-        result.addAll(original.getDxfs());
-        
-        result.forEach(this::flagPart);
-        
+    public static Map<Part, Status> generateReport(List<Part> parts, List<Part> comparisonList){
+        Map<Part, Status> result = new LinkedHashMap<>();
+        for (Part part: parts){
+            result.put(part, checkPart(part, comparisonList));
+        }
         return result;
     }
     
     //
-    private void flagPart(Part part){
+    private static Status checkPart(Part part, List<Part> compareList){
+        Status result;
         if (part instanceof Drawing){
-            flagDrawing((Drawing) part);
+            result = checkDrawing(part, compareList);
         } else {
-            flagTextFile((Dxf) part);
-        }
-    }
-    
-    //TODO drawing check to drawing and revision Green, then drawing Orange, then dxf Green, Uptodate flag checkbox table
-    //TODO Up to date should be separate from green orange and red, substitute for yellow
-    private void flagDrawing(Drawing drawing){
-        List<Pair<String, String>> numberAndRevision = new ArrayList<>();
-        comparison.getDrawings().forEach(element -> numberAndRevision.add(new Pair<>(element.getPartNumber(), element.getRevisionLevel())));
-        for (Pair<String, String> pair: numberAndRevision){
-            if (drawing.getPartNumber().equalsIgnoreCase(pair.getKey())){
-                if (drawing.getRevisionLevel().equalsIgnoreCase(pair.getValue())){
-                    drawing.setStatus(Status.CORRECT);
-                    return;
-                }
-                drawing.setStatus(Status.MISMATCH);
-                return;
-            }
-        }
-        List<String> textFiles = comparison.getDxfs().stream().map(Part::getPartNumber).toList();
-        if (textFiles.contains(drawing.getPartNumber())){
-            drawing.setStatus(Status.CORRECT);
+            result = checkDxf(part, compareList);
         }
         
-        drawing.setStatus(Status.MISSING);
+        return result;
     }
     
-    private void flagTextFile(Dxf dxf){
-        if (comparison.getDxfs().isEmpty()){
-            List<String> parts = comparison.getDrawings().stream().map(Part::getPartNumber).toList();
-            if (parts.contains(dxf.getPartNumber())){
-                dxf.setStatus(Status.CORRECT);
-                return;
-            }
-        } else {
-            List<Pair<String, String>> numberAndRevision = comparison
-                    .getDxfs()
-                    .stream()
-                    .map(element -> new Pair<>(element.getDxfNumber(), element.getRevisionLevel()))
-                    .toList();
-            for (Pair<String, String> pair: numberAndRevision){
-                if (dxf.getDxfNumber().equalsIgnoreCase(pair.getKey())){
-                    if (dxf.getRevisionLevel().equalsIgnoreCase(pair.getValue())){
-                        dxf.setStatus(Status.CORRECT);
+    
+    // if theyre different part types, dont check rev level, if they are check both
+    private static Status checkDrawing(Part part, List<Part> compareList){
+        Status result = Status.MISSING;
+        for (Part comparisonPart: compareList){
+            if (comparisonPart.getPartNumber().equalsIgnoreCase(part.getPartNumber())){
+                if (comparisonPart instanceof Dxf){
+                    result = Status.CORRECT;
+                } else if (comparisonPart instanceof Drawing){
+                    if (equalsIgnoreCaseNullCase(comparisonPart.getRevisionLevel(), part.getRevisionLevel())){
+                        result = Status.CORRECT;
                     } else {
-                        dxf.setStatus(Status.MISMATCH);
+                        result = Status.MISMATCH;
                     }
-                    return;
                 }
             }
         }
-        dxf.setStatus(Status.MISSING);
+        
+        return result;
+    }
+    
+    // if theyre different part types, dont check rev level, if they are check both
+    private static Status checkDxf(Part part, List<Part> compareList){
+        Status result = Status.MISSING;
+        for (Part comparisonPart: compareList){
+            if (comparisonPart.getPartNumber().equalsIgnoreCase(part.getPartNumber())){
+                if (comparisonPart instanceof Drawing){
+                    result = Status.CORRECT;
+                } else if (comparisonPart instanceof Dxf){
+                    if (equalsIgnoreCaseNullCase(comparisonPart.getRevisionLevel(), part.getRevisionLevel())){
+                        result = Status.CORRECT;
+                    } else {
+                        result = Status.MISMATCH;
+                    }
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    private static boolean equalsIgnoreCaseNullCase(String first, String second){
+        if (first == null && second == null){
+            return true;
+        } else if (first == null || second == null){
+            return false;
+        } else {
+            return first.equalsIgnoreCase(second);
+        }
     }
 }

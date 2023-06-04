@@ -16,10 +16,10 @@ import java.util.Objects;
 public class BOMServiceTest {
     
     @ParameterizedTest
-    @CsvFileSource(resources = "/transmittalreview/BOM/String.csv")
+    @CsvFileSource(resources = "/transmittalReview/BOM/String.csv")
     public void stringParse(String input, String expectedList) {
         BOMService testService = new BOMService(input);
-        List<String> processedList = testService.getBom().getParts().stream().map(Drawing::getPartNumber).toList();
+        List<String> processedList = testService.getBom().getDrawings().stream().map(Drawing::getPartNumber).toList();
         List<String> expected = new ArrayList<>(Arrays.asList(expectedList.split(",")));
         Assertions.assertEquals(processedList.size(), expected.size());
         Assertions.assertTrue(processedList.containsAll(expected));
@@ -27,11 +27,11 @@ public class BOMServiceTest {
     }
     
     @ParameterizedTest
-    @CsvFileSource(resources = "/transmittalreview/BOM/File.csv")
+    @CsvFileSource(resources = "/transmittalReview/BOM/File.csv")
     public void fileParse(String resourceFilepath, String expectedList){
         File inputFile = new File(Objects.requireNonNull(getClass().getResource(resourceFilepath)).getFile());
         BOMService testService = new BOMService(inputFile);
-        List<String> processedList = testService.getBom().getParts().stream().map(Drawing::getFullName).toList();
+        List<String> processedList = testService.getBom().getDrawings().stream().map(Drawing::getFullName).toList();
         List<String> expected = new ArrayList<>(Arrays.asList(expectedList.split(",")));
         Assertions.assertEquals(processedList.size(), expected.size());
         Assertions.assertTrue(processedList.containsAll(expected));
@@ -39,11 +39,11 @@ public class BOMServiceTest {
     }
     
     @ParameterizedTest
-    @CsvFileSource(resources = "/transmittalreview/BOM/Clipboard.csv")
+    @CsvFileSource(resources = "/transmittalReview/BOM/Clipboard.csv")
     public void clipboardParse(String clipboardFile, String expectedList) {
         File inputFile = new File(Objects.requireNonNull(getClass().getResource(clipboardFile)).getFile());
         BOMService testService = new BOMService(inputFile);
-        List<String> processedList = testService.getBom().getParts().stream().map(Drawing::getFullName).toList();
+        List<String> processedList = testService.getBom().getDrawings().stream().map(Drawing::getFullName).toList();
         List<String> expected = new ArrayList<>(Arrays.asList(expectedList.split(",")));
         Assertions.assertEquals(processedList.size(), expected.size());
         Assertions.assertTrue(processedList.containsAll(expected));
@@ -54,6 +54,6 @@ public class BOMServiceTest {
     public void nullFile(){
         File file = null;
         BOMService testService = new BOMService(file);
-        Assertions.assertEquals(testService.getBom().getParts(), new ArrayList<>());
+        Assertions.assertEquals(testService.getBom().getDrawings(), new ArrayList<>());
     }
 }

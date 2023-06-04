@@ -1,87 +1,79 @@
 package com.example.transmittalreview.model.service;
 
-import com.example.transmittalreview.model.entities.BOM;
 import com.example.transmittalreview.model.entities.Drawing;
+import com.example.transmittalreview.model.entities.Part;
+import lombok.Data;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//TODO rewrite so bom is no longer a variable, String input is the variable extractBom renamed to getBom.
+@Data
 public class BOMService {
-    private BOM bom;
+    private String content;
     
     public BOMService(String clipboardInput){
-        extractBom(clipboardInput);
+        content = clipboardInput;
     }
     
     public BOMService(File fileInput){
-        String content = fileToString(fileInput);
-        extractBom(content);
+        content = fileToContent(fileInput);
     }
     
-    public BOM getBom() {
-        return bom;
-    }
-    
-    
-    private void extractBom(String input){
-        List<Drawing> result = new ArrayList<>();
-        //Group 0 full, Group 1 / 5 Strip _ for name, Group 3 is for optional, Group 4 rev level
-        Pattern pattern = Pattern.compile("(\\w*)?(\\d{6}[Dd])(_rev_(\\w))?(\\w*)?", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(input);
+    public List<Part> getParts() {
+        List<Part> result = new ArrayList<>();
+        
+        Matcher matcher = drawingMatcher(content);
         while (matcher.find()) {
             result.add(parseSingleDrawing(matcher.group()));
         }
-        this.bom = new BOM(result);
+        
+        return result;
     }
     
-    private String fileToString(File inputFile){
+    private String fileToContent(File inputFile){
         BufferedReader reader = null;
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder contentBuilder = new StringBuilder();
         try {
             reader = new BufferedReader(new FileReader(inputFile.getCanonicalFile()));
             String line = reader.readLine();
             
-            int frontCounter = 0;
-            while (line != null && frontCounter < 2){
+            //Uses BFTA as a marker to pull just the top level BOM
+            int frontAssemblyCounter = 0;
+            while (line != null && frontAssemblyCounter < 2){
                 if (line.contains("BFTA")){
-                    frontCounter++;
+                    frontAssemblyCounter++;
                 }
-                stringBuilder.append(line).append("\\n");
+                contentBuilder.append(line).append("\\n");
                 line = reader.readLine();
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     
-        return stringBuilder.toString();
+        return contentBuilder.toString();
     }
     
     private Drawing parseSingleDrawing(String input){
-        Pattern pattern = Pattern.compile("(\\w*)?(\\d{6}[Dd])(_rev_(\\w))?(\\w*)?", Pattern.CASE_INSENSITIVE);
-        Matcher drawingPattern = pattern.matcher(input);
-        drawingPattern.find();
-        String fullname = drawingPattern.group(0);
-        String name = null;
-        String partNumber = drawingPattern.group(2);
-        if (drawingPattern.group(1) == null || drawingPattern.group(1).equals("")){
-            name = drawingPattern.group(5).replaceAll("_", " ").strip();
+        Matcher singleDrawing = drawingMatcher(input);
+        if (singleDrawing.find()) {
+            return Drawing.builder()
+                    //if prefix is null, check suffix, if suffix is also null return null.
+                    .prefix(singleDrawing.group(1) != null ? singleDrawing.group(1) :
+                            singleDrawing.group(5) != null ? singleDrawing.group(5) : null)
+                    .partNumber(singleDrawing.group(2))
+                    .revisionLevel(singleDrawing.group(4))
+                    .build();
         } else {
-            name = drawingPattern.group(1).replaceAll("_"," ").strip();
+            return null;
         }
-        String revisionLevel = null;
-        if (drawingPattern.group(4) == null){
-            revisionLevel = "0";
-        } else {
-            revisionLevel = drawingPattern.group(4);
-        }
-        String filepath = "";
-        
-        return new Drawing(fullname, name, partNumber, revisionLevel, filepath);
+    }
+    
+    private Matcher drawingMatcher(String textToSearch){
+        //Group 0 full, Group 1 / 5 Strip _ for name, Group 3 is for optional, Group 4 rev level
+        Pattern pattern = Pattern.compile("(\\w*)?_?(\\d{6}[Dd])(_rev_(\\w))?_?(\\w*)?", Pattern.CASE_INSENSITIVE);
+        return pattern.matcher(textToSearch);
     }
 }

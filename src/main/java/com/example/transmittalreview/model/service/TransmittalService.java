@@ -1,10 +1,11 @@
 package com.example.transmittalreview.model.service;
 
-import com.example.transmittalreview.model.dao.Settings;
-import com.example.transmittalreview.model.entities.BOM;
+import com.example.transmittalreview.model.dao.TransmittalSettings;
 import com.example.transmittalreview.model.entities.Drawing;
 import com.example.transmittalreview.model.entities.Dxf;
-import com.example.transmittalreview.model.dao.TransmittalPageLayout;
+import com.example.transmittalreview.model.entities.Part;
+import lombok.Builder;
+import lombok.Data;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -17,67 +18,45 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//TODO file validation
+@Builder
+@Data
 public class TransmittalService {
-    private Settings settings;
-    private File file;
+    private TransmittalSettings transmittalSettings;
     
-    public TransmittalService(File file, Settings settings){
-        this.settings = settings;
-        this.file = file;
-    }
-    
-    public File getFile() {
-        return file;
-    }
-    
-    public void setFile(File file) {
-        this.file = file;
-    }
-    
-    public Settings getSettings() {
-        return settings;
-    }
-    
-    public void setSettings(Settings settings) {
-        this.settings = settings;
-    }
-    
-    public BOM getBom(){
-        List<TransmittalPageLayout> transmittalLayout = settings.getTransmittalLayout();
-        List<Drawing> drawings = new ArrayList<>();
-        List<Dxf> textFiles = new ArrayList<>();
+    public List<Part> getParts(File transmittal){
         
-        Workbook workbook = workbookFromFile(file);
-        if (workbook == null){
-            return new BOM();
-        }
+        List<Part> partsList = new ArrayList<>();
         
-        for (TransmittalPageLayout page: transmittalLayout){
-            Sheet sheet = workbook.getSheet(page.getPageName());
-            List<Integer> drawingRows = page.getDrawingRows();
-            List<Integer> textRows = page.getTextRows();
+        List<TransmittalSettings.PageLayout> transmittalLayout = transmittalSettings.getPageLayouts();
+        
+        Workbook workbook = workbookFromFile(transmittal);
+        if (workbook == null) return new ArrayList<>();
+        
+        for (TransmittalSettings.PageLayout pageLayout: transmittalLayout){
+            Sheet sheet = workbook.getSheet(pageLayout.getPageName());
+            List<Integer> drawingRows = pageLayout.getDrawingRows();
+            List<Integer> textRows = pageLayout.getTextRows();
             
             for (Integer rowNumber: drawingRows){
                 Row row = sheet.getRow(rowNumber - 1);
                 Drawing drawing = drawingFromRow(row);
                 if (drawing != null) {
-                    drawings.add(drawing);
+                    partsList.add(drawing);
                 }
             }
             
             for (Integer rowNumber: textRows){
                 Row row = sheet.getRow(rowNumber - 1);
-                textFiles.add(dxfFromRow(row));
+                partsList.add(dxfFromRow(row));
             }
         }
-        return new BOM(drawings, textFiles);
+        return partsList;
     }
     
-    private Workbook workbookFromFile(File file){
+    private Workbook workbookFromFile(File transmittal){
         Workbook workbook = null;
         try{
-            workbook = XSSFWorkbookFactory.createWorkbook(file, true);
+            workbook = XSSFWorkbookFactory.createWorkbook(transmittal, true);
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -86,84 +65,72 @@ public class TransmittalService {
     }
     
     private Drawing drawingFromRow(Row row){
-        TransmittalPageLayout page = layoutFromRow(row);
-        Cell nameCell = row.getCell(page.getNameColumn());
-        Cell numberCell = row.getCell(page.getNumberColumn());
-        Cell revisionCell = row.getCell(page.getRevisionColumn());
-        String name = stringFromCell(nameCell);
-        String number = stringFromCell(numberCell);
-        if (!isDrawing(number)){
-            return null;
-        }
-        String revision;
-        Pattern pattern = Pattern.compile("[A-Za-z]");
-        Matcher matcher = pattern.matcher("");
-        revision = stringFromCell(revisionCell);
-        if (revision.contains("NEW")){
-            revision = "0";
-        }
-        matcher.reset(revision);
-        StringBuilder fullname = new StringBuilder();
-        if (name != null && !name.isEmpty()){
-            fullname.append(name).append("_");
-        }
-        fullname.append(number);
-        if (matcher.matches()){
-            fullname.append("_REV_").append(revision);
-        }
+        TransmittalSettings.PageLayout page = layoutFromRow(row);
         
-        return new Drawing(fullname.toString(), name, number, revision, "");
+        String name = stringFromCell(row.getCell(page.getNameColumn()));
+        String number = stringFromCell(row.getCell(page.getNumberColumn()));
+        String revisionLevel = stringFromCell(row.getCell(page.getRevisionColumn()));
+        
+        if (!isDrawing(number)) return null;
+        
+        Pattern revision = Pattern.compile("[A-Za-z]");
+        Matcher matcher = revision.matcher(revisionLevel);
+        
+        return Drawing.builder()
+                .prefix(name)
+                .partNumber(number)
+                .revisionLevel(matcher.matches() ? revisionLevel : null)
+                .build();
     }
     
     private Dxf dxfFromRow(Row row){
-        TransmittalPageLayout page = layoutFromRow(row);
+        TransmittalSettings.PageLayout pageLayout = layoutFromRow(row);
         
-        String dxfCellValue = stringFromCell(row.getCell(page.getNumberColumn()));
-        String dxfNumber = dxfNumberFromCell(dxfCellValue);
-        String partNumber = dxfNumber.substring(0,6) + "D"; //TODO method to parse part no.
-        String revisionLevel = stringFromCell(row.getCell(page.getRevisionColumn()));
-        StringBuilder fullName = new StringBuilder(partNumber);
-        Pattern pattern = Pattern.compile("[1-9]+");
-        if (pattern.matcher(revisionLevel).matches()){
-            fullName.append("_REV_").append(revisionLevel);
-        }
-        fullName.append(".dxf");
-        return new Dxf(fullName.toString(), partNumber, dxfNumber, revisionLevel, "");
-    }
-    
-    private String dxfNumberFromCell(String cellValue){
-        if (cellValue.length() == 0){
-            return cellValue;
-        }
-        return cellValue.substring(0, cellValue.indexOf("."));
-    }
-    
-    private boolean rowContainsDrawing(Row row){
-        TransmittalPageLayout pageLayout = layoutFromRow(row);
-        String drawingNumber = stringFromCell(row.getCell(pageLayout.getNumberColumn()));
-        return isDrawing(drawingNumber);
+        String number = stringFromCell(row.getCell(pageLayout.getNumberColumn()));
+        String revisionLevel = stringFromCell(row.getCell(pageLayout.getRevisionColumn()));
+        
+        if (!isDxf(number)) return null;
+        
+        Pattern revision = Pattern.compile("[1-9]+");
+        Matcher matcher = revision.matcher(revisionLevel);
+        
+        return Dxf.builder()
+                // remove trailing .TXT/.DXF
+                .dxfNumber(number.substring(0, number.indexOf(".")))
+                .revisionLevel(matcher.matches() ? revisionLevel : null)
+                .build();
     }
     
     private String stringFromCell(Cell cell){
         return switch (cell.getCellType()){
             case NUMERIC -> String.valueOf(cell.getNumericCellValue());
             case STRING -> cell.getStringCellValue();
-            default -> "";
+            default -> "defaulting";
         };
     }
     
     private boolean isDrawing(String inputText){
-        Pattern pattern = Pattern.compile("(\\w*)?(\\d{6}[Dd])(_rev_(\\w))?(\\w*)?", Pattern.CASE_INSENSITIVE);
+        if (inputText == null) return false;
+        
+        Pattern pattern = Pattern.compile("(\\d{6}[Dd])", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(inputText);
         return  matcher.matches();
     }
     
-    private TransmittalPageLayout layoutFromRow(Row row){
-        for (TransmittalPageLayout page: settings.getTransmittalLayout()){
+    private boolean isDxf(String inputText){
+        if (inputText == null) return false;
+        
+        Pattern pattern = Pattern.compile("(\\d*\\.\\w*)", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputText);
+        return  matcher.matches();
+    }
+    
+    private TransmittalSettings.PageLayout layoutFromRow(Row row){
+        for (TransmittalSettings.PageLayout page: transmittalSettings.getPageLayouts()){
             if (page.getPageName().equals(row.getSheet().getSheetName())){
                 return page;
             }
         }
-        return new TransmittalPageLayout();
+        return TransmittalSettings.PageLayout.builder().build();
     }
 }

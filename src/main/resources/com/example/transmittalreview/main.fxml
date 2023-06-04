@@ -19,12 +19,7 @@
      <menus>
        <Menu mnemonicParsing="false" text="File">
          <items>
-           <MenuItem mnemonicParsing="false" text="Close" />
-         </items>
-       </Menu>
-       <Menu mnemonicParsing="false" text="Edit">
-         <items>
-           <MenuItem mnemonicParsing="false" text="Delete" />
+               <MenuItem mnemonicParsing="false" text="Settings" />
          </items>
        </Menu>
        <Menu mnemonicParsing="false" text="Help">
@@ -40,14 +35,14 @@
             <children>
                <HBox>
                   <children>
-                     <Button fx:id="firstSelectFile" mnemonicParsing="false" onAction="#firstSelectFileClicked" text="Select File" />
-                     <Button fx:id="firstClipboard" mnemonicParsing="false" onAction="#firstClipboardClicked" text="Clipboard" />
+                     <Button fx:id="leftSelectFile" mnemonicParsing="false" onAction="#leftSelectFileClicked" text="Select File" />
+                     <Button fx:id="leftClipboard" mnemonicParsing="false" onAction="#leftClipboardClicked" text="Clipboard" />
                   </children>
                </HBox>
-               <TableView fx:id="firstTableView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <TableView fx:id="leftTableView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                  <columns>
-                   <TableColumn fx:id="firstPartNumberColumn" editable="false" prefWidth="199.0" sortable="false" text="Part Number" />
-                   <TableColumn fx:id="firstFlagColumn" editable="false" minWidth="0.0" prefWidth="200.0" sortable="false" text="Exists?" />
+                   <TableColumn fx:id="leftPartNumberColumn" editable="false" prefWidth="199.0" sortable="false" text="Part Number" />
+                   <TableColumn fx:id="leftFlagColumn" editable="false" minWidth="0.0" prefWidth="200.0" sortable="false" text="Exists?" />
                  </columns>
                </TableView>
                <Button mnemonicParsing="false" text="Button" />
@@ -57,14 +52,14 @@
             <children>
                <HBox>
                   <children>
-                     <Button fx:id="secondSelectFile" mnemonicParsing="false" onAction="#secondSelectFileClicked" text="Select File" />
-                     <Button fx:id="secondClipboard" mnemonicParsing="false" onAction="#secondClipboardClicked" text="Clipboard" />
+                     <Button fx:id="rightSelectFile" mnemonicParsing="false" onAction="#rightSelectFileClicked" text="Select File" />
+                     <Button fx:id="rightClipboard" mnemonicParsing="false" onAction="#rightClipboardClicked" text="Clipboard" />
                   </children>
                </HBox>
-               <TableView fx:id="secondTableView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <TableView fx:id="rightTableView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                   <columns>
-                     <TableColumn fx:id="secondPartNumberColumn" editable="false" prefWidth="199.0" sortable="false" text="Part Number" />
-                     <TableColumn fx:id="secondFlagColumn" editable="false" minWidth="0.0" prefWidth="200.0" sortable="false" text="Exists?" />
+                     <TableColumn fx:id="rightPartNumberColumn" editable="false" prefWidth="199.0" sortable="false" text="Part Number" />
+                     <TableColumn fx:id="rightFlagColumn" editable="false" minWidth="0.0" prefWidth="200.0" sortable="false" text="Exists?" />
                   </columns>
                </TableView>
                <Button mnemonicParsing="false" text="Button" />

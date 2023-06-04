@@ -1,19 +1,34 @@
 package com.example.transmittalreview.model.entities;
 
-public class Drawing extends Part{
-    private String name;
-    public Drawing(){}
+import lombok.Builder;
+import lombok.Data;
+
+@Builder
+@Data
+public class Drawing implements Part{
     
-    public Drawing(String fullName, String name, String partNumber, String revisionLevel, String filePath){
-        super(fullName, partNumber, revisionLevel, filePath);
-        this.name = name;
+    private String prefix;
+    private String partNumber;
+    private String revisionLevel;
+    
+    public String getFullName(){
+        StringBuilder fullName = new StringBuilder();
+        if (prefix != null) fullName.append(prefix).append("_");
+        fullName.append(getPartNumber());
+        if (getRevisionLevel() != null) fullName.append("_").append(getRevisionLevel());
+        
+        return fullName.toString();
     }
     
-    public String getName() {
-        return name;
+    public String getFileName(){
+        StringBuilder fileName = new StringBuilder();
+        fileName.append(getPartNumber());
+        if (getRevisionLevel() != null) fileName.append("_").append(getRevisionLevel()).append(".pdf");
+        
+        return fileName.toString();
     }
     
-    public void setName(String name) {
-        this.name = name;
+    public String toString(){
+        return getFullName();
     }
 }

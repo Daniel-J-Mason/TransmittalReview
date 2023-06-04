@@ -1,21 +1,35 @@
 package com.example.transmittalreview.model.entities;
 
-public class Dxf extends Part {
+import lombok.Builder;
+import lombok.Data;
+
+@Builder
+@Data
+public class Dxf implements Part {
+    
     private String dxfNumber;
+    private String revisionLevel;
     
-    public Dxf(String fullName, String partNumber, String dxfNumber, String revisionLevel, String filePath) {
-        super(fullName, partNumber, revisionLevel, filePath);
-        this.dxfNumber = dxfNumber;
+    public String getPartNumber(){
+        return dxfNumber.substring(0, 6) + "D";
     }
     
-    public Dxf() {
-        super();
-    }
-    public String getDxfNumber() {
-        return dxfNumber;
+    public String getFullName(){
+        StringBuilder fullName = new StringBuilder();
+        fullName.append(getDxfNumber());
+        if (getRevisionLevel() != null) fullName.append("_").append(getRevisionLevel());
+        return fullName.toString();
     }
     
-    public void setDxfNumber(String dxfNumber) {
-        this.dxfNumber = dxfNumber;
+    public String getFileName(){
+        StringBuilder fileName = new StringBuilder();
+        fileName.append(getDxfNumber());
+        if (getRevisionLevel() != null) fileName.append("_").append(getRevisionLevel()).append(".dxf");
+        
+        return fileName.toString();
+    }
+    
+    public String toString(){
+        return getFullName();
     }
 }
