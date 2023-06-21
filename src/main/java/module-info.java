@@ -13,7 +13,7 @@ module com.example.transmittalreview {
     exports com.example.transmittalreview.controllers;
     exports com.example.transmittalreview.model.service;
     exports com.example.transmittalreview.model.entities;
-    exports com.example.transmittalreview.controllers.entities;
+    exports com.example.transmittalreview.controllers.components;
     exports com.example.transmittalreview.model.dao;
     opens com.example.transmittalreview.model.service to com.google.gson;
     opens com.example.transmittalreview.model.dao to com.google.gson;

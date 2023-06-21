@@ -6,12 +6,8 @@ import com.example.transmittalreview.model.entities.Dxf;
 import com.example.transmittalreview.model.entities.Part;
 import lombok.Builder;
 import lombok.Data;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbookFactory;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +40,13 @@ public class TransmittalService {
                     partsList.add(drawing);
                 }
             }
-            
+
             for (Integer rowNumber: textRows){
                 Row row = sheet.getRow(rowNumber - 1);
-                partsList.add(dxfFromRow(row));
+                Dxf dxf = dxfFromRow(row);
+                if (dxf != null) {
+                    partsList.add(dxf);
+                }
             }
         }
         return partsList;
@@ -57,6 +56,7 @@ public class TransmittalService {
         Workbook workbook = null;
         try{
             workbook = XSSFWorkbookFactory.createWorkbook(transmittal, true);
+            workbook.close();
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -67,10 +67,10 @@ public class TransmittalService {
     private Drawing drawingFromRow(Row row){
         TransmittalSettings.PageLayout page = layoutFromRow(row);
         
-        String name = stringFromCell(row.getCell(page.getNameColumn()));
-        String number = stringFromCell(row.getCell(page.getNumberColumn()));
-        String revisionLevel = stringFromCell(row.getCell(page.getRevisionColumn()));
-        
+        String name = stringFromCell(row.getCell(page.getNameColumn() - 1));
+        String number = stringFromCell(row.getCell(page.getNumberColumn() - 1));
+        String revisionLevel = stringFromCell(row.getCell(page.getRevisionColumn() - 1));
+
         if (!isDrawing(number)) return null;
         
         Pattern revision = Pattern.compile("[A-Za-z]");
@@ -86,11 +86,11 @@ public class TransmittalService {
     private Dxf dxfFromRow(Row row){
         TransmittalSettings.PageLayout pageLayout = layoutFromRow(row);
         
-        String number = stringFromCell(row.getCell(pageLayout.getNumberColumn()));
-        String revisionLevel = stringFromCell(row.getCell(pageLayout.getRevisionColumn()));
+        String number = stringFromCell(row.getCell(pageLayout.getNumberColumn() - 1));
+        String revisionLevel = stringFromCell(row.getCell(pageLayout.getRevisionColumn() - 1));
         
         if (!isDxf(number)) return null;
-        
+
         Pattern revision = Pattern.compile("[1-9]+");
         Matcher matcher = revision.matcher(revisionLevel);
         
@@ -105,7 +105,8 @@ public class TransmittalService {
         return switch (cell.getCellType()){
             case NUMERIC -> String.valueOf(cell.getNumericCellValue());
             case STRING -> cell.getStringCellValue();
-            default -> "defaulting";
+            case FORMULA -> cell.getRichStringCellValue().toString();
+            default -> "";
         };
     }
     

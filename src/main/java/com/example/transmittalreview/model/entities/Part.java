@@ -9,4 +9,6 @@ public interface Part {
     String getFullName();
     
     String getFileName();
+
+    boolean isNew();
 }

@@ -10,15 +10,14 @@ import java.util.TreeMap;
 
 @Data
 public class ApplicationSettingsService {
-        //TODO: Edit for file fidelity
-    public static void save(ApplicationSettings applicationSettings, String fileName) throws IOException {
+    public static void save(ApplicationSettings applicationSettings, String fileName) {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder
                 .setPrettyPrinting()
                 .create();
-        File currentDirectory = new File(".");
-        FileWriter fileWriter = new FileWriter(currentDirectory.getCanonicalFile() + File.separator + fileName + ".json");
+        
         try {
+            FileWriter fileWriter = new FileWriter("." + File.separator + fileName);
             gson.toJson(applicationSettings, fileWriter);
             fileWriter.close();
         } catch (IOException e) {
@@ -58,6 +57,7 @@ public class ApplicationSettingsService {
                 .dxfFolder("dxfFolder")
                 .drawingPrefixes(prefixes)
                 .dxfPrefixes(prefixes)
+                .defaultTransmittalLayout("Wheeled_Coach.json")
                 .isDarkMode(true)
                 .build();
     }

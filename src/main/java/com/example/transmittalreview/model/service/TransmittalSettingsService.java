@@ -14,18 +14,15 @@ import java.util.List;
 
 public class TransmittalSettingsService {
     
-    public static void save(TransmittalSettings transmittalSettings, String fileName) throws IOException {
+    public static void save(TransmittalSettings transmittalSettings, String fileName) {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder
                 .setPrettyPrinting()
                 .create();
         
-        File currentDirectory =
-                new File(".");
-        FileWriter fileWriter =
-                new FileWriter(currentDirectory.getCanonicalFile() + File.separator + fileName + ".json");
-        
         try {
+            FileWriter fileWriter =
+                    new FileWriter("." + File.separator + fileName);
             gson.toJson(transmittalSettings, fileWriter);
             fileWriter.close();
         } catch (IOException e) {

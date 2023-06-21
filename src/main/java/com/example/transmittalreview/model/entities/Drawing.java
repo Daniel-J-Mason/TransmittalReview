@@ -10,12 +10,13 @@ public class Drawing implements Part{
     private String prefix;
     private String partNumber;
     private String revisionLevel;
+    private boolean isNew;
     
     public String getFullName(){
         StringBuilder fullName = new StringBuilder();
-        if (prefix != null) fullName.append(prefix).append("_");
+        if (prefix != null && !prefix.equalsIgnoreCase("")) fullName.append(prefix).append("_");
         fullName.append(getPartNumber());
-        if (getRevisionLevel() != null) fullName.append("_").append(getRevisionLevel());
+        if (getRevisionLevel() != null && !getRevisionLevel().equalsIgnoreCase("")) fullName.append("_REV_").append(getRevisionLevel());
         
         return fullName.toString();
     }
