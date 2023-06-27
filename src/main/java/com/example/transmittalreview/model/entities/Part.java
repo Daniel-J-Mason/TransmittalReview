@@ -11,4 +11,6 @@ public interface Part {
     String getFileName();
 
     boolean isNew();
+    
+    void setIsNew(boolean isNew);
 }

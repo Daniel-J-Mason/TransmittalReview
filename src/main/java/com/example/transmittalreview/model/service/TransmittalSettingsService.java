@@ -48,14 +48,15 @@ public class TransmittalSettingsService {
         List<Integer> firstPageDrawingList = 
                 Arrays.asList(9, 11, 13, 14, 15, 16, 17, 18, 19, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35,
                         36, 37, 38, 39, 41, 42, 43, 44, 45, 46, 47);
-        List<Integer> firstPageDxfList = 
+        List<Integer> firstPageSkinList =
                 Arrays.asList(10, 12, 21, 29);
         
         pageLayouts.add(
                 TransmittalSettings.PageLayout.builder()
                         .pageName("BS Transmittal 1")
                         .drawingRows(firstPageDrawingList)
-                        .textRows(firstPageDxfList)
+                        .textRows(new ArrayList<>())
+                        .skinRows(firstPageSkinList)
                         .nameColumn(1)
                         .numberColumn(2)
                         .revisionColumn(4)
@@ -72,6 +73,7 @@ public class TransmittalSettingsService {
                         .pageName("BS Transmittal 2")
                         .drawingRows(secondPageDrawingList)
                         .textRows(secondPageDxfList)
+                        .skinRows(new ArrayList<>())
                         .nameColumn(1)
                         .numberColumn(2)
                         .revisionColumn(4)
@@ -89,13 +91,16 @@ public class TransmittalSettingsService {
                 Arrays.asList(9, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 36
                 , 41, 42, 43, 44, 45, 46, 47);
         List<Integer> firstPageDxfList =
-                Arrays.asList(10, 13, 23, 29, 30, 37, 38, 39, 40);
+                Arrays.asList(30, 37, 38, 39, 40);
+        List<Integer> firstPageSkins =
+                Arrays.asList(10, 13, 23, 29);
         
         pageLayouts.add(
                 TransmittalSettings.PageLayout.builder()
                         .pageName("BODY SHOP TRANSMITTAL 1")
                         .drawingRows(firstPageDrawingList)
                         .textRows(firstPageDxfList)
+                        .skinRows(firstPageSkins)
                         .nameColumn(1)
                         .numberColumn(2)
                         .revisionColumn(4)
@@ -112,6 +117,7 @@ public class TransmittalSettingsService {
                         .pageName("BODY SHOP TRANSMITTAL 2")
                         .drawingRows(secondPageDrawingList)
                         .textRows(secondPageDxfList)
+                        .skinRows(new ArrayList<>())
                         .nameColumn(1)
                         .numberColumn(2)
                         .revisionColumn(4)
@@ -137,6 +143,7 @@ public class TransmittalSettingsService {
                         .pageName("CABINET SHOP TRANSMITTAL")
                         .drawingRows(firstPageDrawingList)
                         .textRows(firstPageDxfList)
+                        .skinRows(new ArrayList<>())
                         .nameColumn(1)
                         .numberColumn(2)
                         .revisionColumn(4)
@@ -152,6 +159,7 @@ public class TransmittalSettingsService {
                         .pageName("MISC CABINET PIECES")
                         .drawingRows(secondPageDrawingList)
                         .textRows(secondPageDxfList)
+                        .skinRows(new ArrayList<>())
                         .nameColumn(1)
                         .numberColumn(2)
                         .revisionColumn(4)

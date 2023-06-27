@@ -15,6 +15,7 @@ public class TransmittalSettings {
     public static class PageLayout {
         private String pageName;
         private List<Integer> drawingRows;
+        private List<Integer> skinRows;
         private List<Integer> textRows;
         private Integer nameColumn;
         private Integer numberColumn;

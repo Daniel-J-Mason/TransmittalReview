@@ -73,7 +73,7 @@ public class BOMService {
     
     private Matcher drawingMatcher(String textToSearch){
         //Group 0 full, Group 1 / 5 Strip _ for name, Group 3 is for optional, Group 4 rev level
-        Pattern pattern = Pattern.compile("(\\w*)?_?(\\d{6}[Dd])(_rev_(\\w))?_?(\\w*)?", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("([A-Za-z0-9]*)?_?(\\d{6}[Dd])(_rev_(\\w))?_?([A-Za-z0-9])?", Pattern.CASE_INSENSITIVE);
         return pattern.matcher(textToSearch);
     }
 }

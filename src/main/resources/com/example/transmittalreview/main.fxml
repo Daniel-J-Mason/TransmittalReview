@@ -5,31 +5,39 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20.0" stylesheets="@styles/dark-theme.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transmittalreview.controllers.MainViewController">
-    <padding>
-        <Insets bottom="20.0" />
-    </padding>
+<VBox fx:id="mainBox" alignment="TOP_CENTER" prefHeight="600.0" prefWidth="800.0" stylesheets="@controllers/styles/dark-theme.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transmittalreview.controllers.MainViewController">
    <MenuBar>
      <menus>
        <Menu mnemonicParsing="false" text="File">
          <items>
-               <MenuItem mnemonicParsing="false" text="Settings" />
+               <MenuItem fx:id="settingsButton" mnemonicParsing="false" onAction="#settingsButtonClicked" text="Settings" />
          </items>
        </Menu>
        <Menu mnemonicParsing="false" text="Help">
          <items>
+               <Menu mnemonicParsing="false" text="Key">
+                 <items>
+                   <MenuItem id="Key-Correct" mnemonicParsing="false" text="Correct" />
+                     <MenuItem id="Key-Mismatch" mnemonicParsing="false" text="Revision Mismatch" />
+                     <MenuItem id="Key-Missing" mnemonicParsing="false" text="Missing/Incorrect" />
+                     <MenuItem id="Key-Exists" mnemonicParsing="false" text="Drawing Exists" />
+                     <MenuItem id="Key-DoesntExist" mnemonicParsing="false" text="Drawing Doesnt Exist" />
+                 </items>
+               </Menu>
            <MenuItem mnemonicParsing="false" text="About" />
          </items>
        </Menu>
      </menus>
    </MenuBar>
-   <HBox VBox.vgrow="ALWAYS">
+   <HBox prefWidth="798.0" VBox.vgrow="ALWAYS">
       <children>
          <VBox HBox.hgrow="ALWAYS">
             <children>
@@ -37,15 +45,23 @@
                   <children>
                      <Button fx:id="leftSelectFile" mnemonicParsing="false" onAction="#leftSelectFileClicked" text="Select File" />
                      <Button fx:id="leftClipboard" mnemonicParsing="false" onAction="#leftClipboardClicked" text="Clipboard" />
+                     <Region HBox.hgrow="ALWAYS" />
+                     <MenuButton fx:id="leftDefaultLayout" mnemonicParsing="false" text="MenuButton">
+                       <items>
+                         <MenuItem mnemonicParsing="false" text="Action 1" />
+                         <MenuItem mnemonicParsing="false" text="Action 2" />
+                       </items>
+                     </MenuButton>
                   </children>
                </HBox>
-               <TableView fx:id="leftTableView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <TableView fx:id="leftTableView" prefHeight="200.0" prefWidth="0.0" VBox.vgrow="ALWAYS">
                  <columns>
-                   <TableColumn fx:id="leftPartNumberColumn" editable="false" prefWidth="199.0" sortable="false" text="Part Number" />
-                   <TableColumn fx:id="leftFlagColumn" editable="false" minWidth="0.0" prefWidth="200.0" sortable="false" text="Exists?" />
+                   <TableColumn fx:id="leftPartNumberColumn" editable="false" prefWidth="10.0" sortable="false" text="Part Number" />
                  </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
                </TableView>
-               <Button mnemonicParsing="false" text="Button" />
             </children>
          </VBox>
          <VBox HBox.hgrow="ALWAYS">
@@ -54,18 +70,42 @@
                   <children>
                      <Button fx:id="rightSelectFile" mnemonicParsing="false" onAction="#rightSelectFileClicked" text="Select File" />
                      <Button fx:id="rightClipboard" mnemonicParsing="false" onAction="#rightClipboardClicked" text="Clipboard" />
+                     <Region HBox.hgrow="ALWAYS" />
+                     <MenuButton fx:id="rightDefaultLayout" mnemonicParsing="false" text="MenuButton">
+                       <items>
+                         <MenuItem mnemonicParsing="false" text="Action 1" />
+                         <MenuItem mnemonicParsing="false" text="Action 2" />
+                       </items>
+                     </MenuButton>
                   </children>
                </HBox>
                <TableView fx:id="rightTableView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                   <columns>
-                     <TableColumn fx:id="rightPartNumberColumn" editable="false" prefWidth="199.0" sortable="false" text="Part Number" />
-                     <TableColumn fx:id="rightFlagColumn" editable="false" minWidth="0.0" prefWidth="200.0" sortable="false" text="Exists?" />
+                     <TableColumn fx:id="rightPartNumberColumn" editable="false" prefWidth="399.0" sortable="false" text="Part Number" />
                   </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
                </TableView>
-               <Button mnemonicParsing="false" text="Button" />
             </children>
          </VBox>
       </children>
+      <VBox.margin>
+         <Insets />
+      </VBox.margin>
    </HBox>
-   <Label text="Label" />
+   <HBox fx:id="labelBox" alignment="CENTER_LEFT">
+      <children>
+         <Label maxWidth="1.7976931348623157E308" text="By Daniel Mason                       daniel.mason@revgroup.com" />
+         <HBox alignment="BASELINE_RIGHT" HBox.hgrow="ALWAYS">
+            <children>
+               <Label alignment="CENTER_RIGHT" text="version: 1.0.0" HBox.hgrow="ALWAYS">
+                  <padding>
+                     <Insets right="10.0" />
+                  </padding>
+               </Label>
+            </children>
+         </HBox>
+      </children>
+   </HBox>
 </VBox>

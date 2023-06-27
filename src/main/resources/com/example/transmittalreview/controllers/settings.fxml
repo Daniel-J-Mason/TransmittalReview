@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="settingsRoot" alignment="TOP_CENTER" prefWidth="600.0" spacing="20.0" stylesheets="@styles/dark-theme.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transmittalreview.controllers.SettingsViewController">
+   <children>
+      <HBox alignment="TOP_CENTER" spacing="5.0">
+         <children>
+            <Label maxHeight="1.7976931348623157E308" prefWidth="130.0" text="Drawings Folder">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="drawingsFolderField" prefHeight="32.0" prefWidth="350.0" />
+            <Button fx:id="drawingsFolderButton" mnemonicParsing="false" onAction="#drawingsFolderButtonClicked" prefHeight="32.0" prefWidth="40.0">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@file_transparent_white.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+      <HBox alignment="TOP_CENTER" spacing="5.0">
+         <children>
+            <Label maxHeight="1.7976931348623157E308" prefWidth="130.0" text="Dxf's Folder">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="dxfFolderField" prefHeight="32.0" prefWidth="350.0" />
+            <Button fx:id="dxfFolderButton" mnemonicParsing="false" onAction="#dxfFolderButtonClicked" prefHeight="32.0" prefWidth="40.0">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@file_transparent_white.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+      <HBox alignment="TOP_CENTER" spacing="5.0">
+         <children>
+            <Label maxHeight="1.7976931348623157E308" prefWidth="130.0" text="Default Layout">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <MenuButton fx:id="layoutMenuButton" mnemonicParsing="false" prefHeight="32.0" prefWidth="350.0">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Action 1" />
+                <MenuItem mnemonicParsing="false" text="Action 2" />
+              </items>
+            </MenuButton>
+            <Label opacity="0.0" text="Label" />
+         </children>
+      </HBox>
+      <CheckBox fx:id="darkModeToggle" mnemonicParsing="false" selected="true" text="Dark Mode?">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </CheckBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+         <children>
+            <Button fx:id="applyButton" mnemonicParsing="false" onAction="#applyButtonPressed" text="Apply">
+               <font>
+                  <Font size="15.0" />
+               </font></Button>
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelButtonClicked" text="Cancel">
+               <font>
+                  <Font size="15.0" />
+               </font></Button>
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets top="20.0" />
+   </padding>
+</VBox>

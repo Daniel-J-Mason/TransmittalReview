@@ -1,0 +1,225 @@
+.root
+{
+    -fx-background-color: grey;
+    -fx-text-fill: #3F414B;
+    -fx-border-color: #1E1F2B;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
+}
+.button
+{
+    -fx-background-color: grey;
+    -fx-text-fill: #1E1F2B;
+    -fx-border-color: #1E1F2B;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
+}
+
+.button:hover
+{
+    -fx-text-fill: grey;
+    -fx-background-color: #1E1F2B;
+}
+
+.button:focused
+{
+    -fx-text-fill: grey;
+    -fx-background-color: #1E1F2B;
+    -fx-border-color: #1E1F2B;
+    -fx-border-radius: 5px;
+    -fx-border-width: 1px;
+}
+
+Hyperlink
+{
+    -fx-text-fill: #9CD1BB;
+}
+
+Hyperlink:focused
+{
+    -fx-border-color: #9CD1BB;
+}
+
+#labelBox
+{
+    -fx-border-color: #1E1F2B;
+    -fx-border-radius: 2px;
+}
+
+TableColumnHeader{
+    -fx-background-color: #1E1F2B;
+}
+
+.label
+{
+    -fx-text-fill: black;
+}
+
+.table-view
+{
+    -fx-text-fill: black;
+    -fx-background-color: grey;
+    -fx-border-color: #1E1F2B;
+    -fx-border-insets: 1px;
+    -fx-border-radius: 2px;
+}
+
+.table-view .column-header-background
+{
+    -fx-background-color: grey;
+}
+
+.table-view .column-header-background .filler
+{
+    -fx-background-color: grey;
+}
+
+.table-view .column-header-background .nested-column-header {
+    -fx-background-color: grey;
+
+}
+
+.table-view .column-header-background .label
+{
+    -fx-text-fill: grey;
+    -fx-background-color: #1E1F2B;
+}
+
+.table-row-cell {
+    -fx-border-color: #1E1F2B;
+}
+
+.table-row-cell .text
+{
+    -fx-background-color: #303342;
+    -fx-fill: white;
+}
+
+.table-row-cell:missing-file .text {
+    -fx-strikethrough: true;
+    -fx-fill: black;
+}
+
+.table-view > .virtual-flow > .corner {
+    -fx-background-color: #1E1F2B;
+}
+
+.scroll-bar:vertical
+{
+    -fx-background-color: #303342;
+}
+
+.scroll-bar:vertical .thumb
+{
+    -fx-background-color: #303342;
+}
+
+.scroll-bar:vertical .track
+{
+    -fx-background-color: grey;
+}
+
+.text-field
+{
+    -fx-text-fill: white;
+    -fx-background-color: #303342;
+    -fx-border-color: transparent;
+    -fx-border-width: 1px;
+}
+
+.text-field:focused
+{
+    -fx-border-color: #1E1F2B;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+}
+
+.menu-bar
+{
+    -fx-background-color: grey;
+    -fx-border-color: #1E1F2B;
+    -fx-border-width: 1px;
+}
+
+.radio-menu-item
+{
+    -fx-background-color: grey;
+}
+
+.menu:openvertically:hover {
+    -fx-background-color: #3F414B;
+}
+
+.menu:openvertically:showing{
+    -fx-background-color: #3F414B;
+}
+
+.menu-item
+{
+    -fx-background-color: grey;
+}
+
+.menu-item .container .menu:openvertically{
+    -fx-border-color: #1E1F2B;
+    -fx-border-width: 2px;
+}
+
+.menu-item:hover
+{;
+    -fx-background-color: #3F414B;
+}
+
+.context-menu
+{
+    -fx-background-color: grey;
+}
+
+.radio-button
+{
+    -fx-text-fill: white;
+}
+
+.scroll-pane
+{
+    -fx-background-color: #303342;
+}
+
+.scroll-pane .scroll-bar:vertical
+{
+    -fx-background-color: #303342;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb
+{
+    -fx-background-color: #303342;
+}
+
+.scroll-pane .scroll-bar:vertical .track
+{
+    -fx-background-color: #1E1F2B;
+}
+
+.check-box
+{
+    -fx-text-fill: white;
+}
+
+.check-box:determinate .box
+{
+    -fx-background-color: #3F414B;
+}
+
+.check-box:selected .box .mark
+{
+    -fx-background-color: white;
+}
+
+.radio-button .radio
+{
+    -fx-background-color: #3F414B;
+}
+
+.radio-button:selected .radio .dot
+{
+    -fx-background-color: white;
+}

@@ -17,6 +17,7 @@ public class Drawing implements Part{
         if (prefix != null && !prefix.equalsIgnoreCase("")) fullName.append(prefix).append("_");
         fullName.append(getPartNumber());
         if (getRevisionLevel() != null && !getRevisionLevel().equalsIgnoreCase("")) fullName.append("_REV_").append(getRevisionLevel());
+        if(isNew) fullName.append("-NEW");
         
         return fullName.toString();
     }
@@ -24,12 +25,21 @@ public class Drawing implements Part{
     public String getFileName(){
         StringBuilder fileName = new StringBuilder();
         fileName.append(getPartNumber());
-        if (getRevisionLevel() != null) fileName.append("_").append(getRevisionLevel()).append(".pdf");
+        if (getRevisionLevel() != null) {
+            fileName.append("_").append(getRevisionLevel()).append(".pdf");
+        } else {
+            fileName.append(".pdf");
+        }
         
         return fileName.toString();
     }
     
     public String toString(){
         return getFullName();
+    }
+    
+    @Override
+    public void setIsNew(boolean isNew) {
+        this.isNew = isNew;
     }
 }

@@ -15,6 +15,18 @@ public class ComparisonReport {
         for (Part part: parts){
             result.put(part, checkPart(part, comparisonList));
         }
+        
+        // Set BOM parts as New if they are correct and compared to a transmittal that reflects them as new
+        for (Part part: result.keySet()){
+            if (result.get(part) == Status.CORRECT) {
+                Part comparisonPart = comparisonList.stream()
+                        .filter(part1 -> part1.getPartNumber().equalsIgnoreCase(part.getPartNumber()))
+                        .toList()
+                        .get(0);
+                part.setIsNew(comparisonPart.isNew());
+            }
+        }
+        
         return result;
     }
     
@@ -36,7 +48,7 @@ public class ComparisonReport {
         Status result = Status.MISSING;
         for (Part comparisonPart: compareList){
             if (comparisonPart.getPartNumber().equalsIgnoreCase(part.getPartNumber())){
-                if (comparisonPart instanceof Dxf){
+                if (comparisonPart instanceof Dxf && !((Dxf) comparisonPart).isSkin()){
                     result = Status.CORRECT;
                 } else if (comparisonPart instanceof Drawing){
                     if (equalsIgnoreCaseNullCase(comparisonPart.getRevisionLevel(), part.getRevisionLevel())){
@@ -58,7 +70,7 @@ public class ComparisonReport {
             if (comparisonPart.getPartNumber().equalsIgnoreCase(part.getPartNumber())){
                 if (comparisonPart instanceof Drawing){
                     result = Status.CORRECT;
-                } else if (comparisonPart instanceof Dxf){
+                } else if (comparisonPart instanceof Dxf && !((Dxf) comparisonPart).isSkin()){
                     if (equalsIgnoreCaseNullCase(comparisonPart.getRevisionLevel(), part.getRevisionLevel())){
                         result = Status.CORRECT;
                     } else {
