@@ -26,7 +26,7 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@file_transparent_white.png" />
+                        <Image url="@images/file_transparent_white.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -45,7 +45,7 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@file_transparent_white.png" />
+                        <Image url="@images/file_transparent_white.png" />
                      </image>
                   </ImageView>
                </graphic>

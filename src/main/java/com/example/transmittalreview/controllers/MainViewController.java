@@ -1,8 +1,7 @@
 package com.example.transmittalreview.controllers;
 
 import com.example.transmittalreview.controllers.components.TablePart;
-import com.example.transmittalreview.model.dao.ApplicationSettings;
-import com.example.transmittalreview.model.dao.TransmittalSettings;
+import com.example.transmittalreview.model.dao.*;
 import com.example.transmittalreview.model.entities.Drawing;
 import com.example.transmittalreview.model.entities.Dxf;
 import com.example.transmittalreview.model.entities.Part;
@@ -27,17 +26,18 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class MainViewController {
     public TableView<TablePart> leftTableView;
@@ -344,6 +344,7 @@ public class MainViewController {
         Stage dialog = new Stage();
         dialog.setTitle("Settings");
         dialog.setScene(scene);
+        dialog.getIcons().add(new Image(Objects.requireNonNull(SettingsViewController.class.getResourceAsStream("images/Transmittal-logo.ico"))));
         dialog.show();
     }
 }
