@@ -1,9 +1,9 @@
 * {
-    -fx-base: #303342;
-    -fx-accent: #3F414B;
-    -fx-accent2: #1E1F2B;
-    -fx-trim: grey;
-    -fx-text: white;
+    -fx-base: #b9b9b9;
+    -fx-accent: #848591;
+    -fx-accent2: #393d5d;
+    -fx-trim: #393d5d;
+    -fx-text: black;
     -fx-text2: white;
 }
 

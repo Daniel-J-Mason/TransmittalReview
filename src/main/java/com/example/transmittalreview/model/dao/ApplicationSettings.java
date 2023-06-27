@@ -15,4 +15,5 @@ public class ApplicationSettings {
     private TreeMap<Integer, Integer> dxfPrefixes;
     private String defaultTransmittalLayout;
     private boolean isDarkMode;
+    private String helpFolder;
 }

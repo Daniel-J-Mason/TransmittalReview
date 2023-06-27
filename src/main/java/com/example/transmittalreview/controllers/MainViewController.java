@@ -1,13 +1,16 @@
 package com.example.transmittalreview.controllers;
 
-import com.example.transmittalreview.controllers.components.SettingsPopup;
 import com.example.transmittalreview.controllers.components.TablePart;
 import com.example.transmittalreview.model.dao.ApplicationSettings;
 import com.example.transmittalreview.model.dao.TransmittalSettings;
 import com.example.transmittalreview.model.entities.Drawing;
 import com.example.transmittalreview.model.entities.Dxf;
 import com.example.transmittalreview.model.entities.Part;
-import com.example.transmittalreview.model.service.*;
+import com.example.transmittalreview.model.service.ApplicationSettingsService;
+import com.example.transmittalreview.model.service.BOMService;
+import com.example.transmittalreview.model.service.ComparisonReport;
+import com.example.transmittalreview.model.service.TransmittalService;
+import com.example.transmittalreview.model.service.TransmittalSettingsService;
 import javafx.application.HostServices;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,22 +18,25 @@ import javafx.css.PseudoClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainViewController {
@@ -44,6 +50,8 @@ public class MainViewController {
     public Button leftSelectFile;
     public MenuItem settingsButton;
     public VBox mainBox;
+    public MenuButton leftDefaultLayoutMenu;
+    public MenuButton rightDefaultLayoutMenu;
     
     private ApplicationSettings applicationSettings;
     private TransmittalSettings leftTransmittalSettings;
@@ -60,6 +68,7 @@ public class MainViewController {
         generateDefaultsIfMissing();
         loadDefaultSettings();
         setupRowColors();
+        setUpMenuBars();
     }
     
     public void leftClipboardClicked(ActionEvent actionEvent) {
@@ -69,7 +78,6 @@ public class MainViewController {
         updateTableStatuses();
         
         leftPartNumberColumn.setText("Clipboard");
-        rightTableView.refresh(); // Update Color changes
     }
     
     public void rightClipboardClicked(ActionEvent actionEvent) {
@@ -79,7 +87,6 @@ public class MainViewController {
         updateTableStatuses();
         
         rightPartNumberColumn.setText("Clipboard");
-        leftTableView.refresh();// Update Color changes
     }
     
     public void leftSelectFileClicked(ActionEvent actionEvent) {
@@ -156,7 +163,7 @@ public class MainViewController {
                 mainBox.getStylesheets().add(getClass().getResource("styles/dark-theme.css").toExternalForm());
             } else {
                 mainBox.getStylesheets().clear();
-                mainBox.getStylesheets().add(getClass().getResource("styles/default-theme.css").toExternalForm());
+                mainBox.getStylesheets().add(getClass().getResource("styles/light-theme.css").toExternalForm());
             }
         }
     }
@@ -166,6 +173,39 @@ public class MainViewController {
         rightTableView.setRowFactory(tv -> defaultRowStyle());
     }
     
+    private void setUpMenuBars(){
+        leftDefaultLayoutMenu.setText(applicationSettings.getDefaultTransmittalLayout());
+        rightDefaultLayoutMenu.setText(applicationSettings.getDefaultTransmittalLayout());
+
+        leftDefaultLayoutMenu.getItems().addAll(localTransmittalLayouts(leftDefaultLayoutMenu));
+        rightDefaultLayoutMenu.getItems().addAll(localTransmittalLayouts(rightDefaultLayoutMenu));
+        
+        leftDefaultLayoutMenu.textProperty()
+                .addListener((observableValue, oldValue, newValue) -> leftTransmittalSettings =
+                TransmittalSettingsService.loadSettings(new File("." + File.separator + newValue)));
+        
+        rightDefaultLayoutMenu.textProperty()
+                .addListener((observableValue, oldValue, newValue) -> rightTransmittalSettings =
+                TransmittalSettingsService.loadSettings(new File("." + File.separator + newValue)));
+    }
+    
+    private List<MenuItem> localTransmittalLayouts(MenuButton belongsTo){
+        File current = new File(".");
+        return Arrays.stream(current.listFiles())
+                .filter(
+                        element -> element.getName().endsWith(".json")
+                                && !element.getName().equalsIgnoreCase("settings.json"))
+                .map(element->layoutMenuButton(element.getName(), belongsTo))
+                .toList();
+    }
+    
+    private MenuItem layoutMenuButton(String text, MenuButton belongsTo){
+        MenuItem menuItem = new MenuItem(text);
+        menuItem.setOnAction(
+                actionEvent -> belongsTo.setText(text)
+        );
+        return menuItem;
+    }
     
     private List<Part> generateBomFromTransmittal(File transmittal, TransmittalSettings transmittalSettings){
         return TransmittalService.builder()
@@ -289,8 +329,6 @@ public class MainViewController {
         this.hostServices = hostServices;
     }
     
-    
-    //TODO: Work on settings view
     public void settingsButtonClicked(ActionEvent actionEvent) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("settings.fxml"));
         Parent parent = fxmlLoader.load();
@@ -298,6 +336,7 @@ public class MainViewController {
         controller.setCallback(event -> {
             if (event.equalsIgnoreCase("SettingsChanged")){
                 loadDefaultSettings();
+                setUpMenuBars();
             }
         });
         Scene scene = new Scene(parent);

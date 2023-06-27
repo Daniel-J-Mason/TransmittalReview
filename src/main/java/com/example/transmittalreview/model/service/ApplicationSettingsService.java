@@ -59,6 +59,7 @@ public class ApplicationSettingsService {
                 .dxfPrefixes(prefixes)
                 .defaultTransmittalLayout("Wheeled_Coach.json")
                 .isDarkMode(true)
+                .helpFolder("helpFolder")
                 .build();
     }
 }
