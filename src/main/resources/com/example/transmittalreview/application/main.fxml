@@ -91,7 +91,7 @@
          <Label fx:id="byLabel" maxWidth="1.7976931348623157E308" text="By Daniel Mason                       daniel.mason@revgroup.com" />
          <HBox alignment="BASELINE_RIGHT" HBox.hgrow="ALWAYS">
             <children>
-               <Label fx:id="versionLabel" alignment="CENTER_RIGHT" text="version: 1.0.0-ALPHA" HBox.hgrow="ALWAYS">
+               <Label fx:id="versionLabel" alignment="CENTER_RIGHT" text="version: 1.0.0" HBox.hgrow="ALWAYS">
                   <padding>
                      <Insets right="10.0" />
                   </padding>
