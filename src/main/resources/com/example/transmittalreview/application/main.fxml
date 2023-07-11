@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="mainBox" alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1000.0" stylesheets="@controllers/styles/dark-theme.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transmittalreview.controllers.MainViewController">
+<VBox fx:id="mainBox" alignment="TOP_CENTER" prefHeight="800.0" prefWidth="1000.0" stylesheets="@../controllers/styles/dark-theme.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.transmittalreview.controllers.MainViewController">
    <MenuBar>
      <menus>
        <Menu mnemonicParsing="false" text="File">
@@ -28,11 +28,11 @@
                    <MenuItem id="Key-Correct" mnemonicParsing="false" text="Correct" />
                      <MenuItem id="Key-Mismatch" mnemonicParsing="false" text="Revision Mismatch" />
                      <MenuItem id="Key-Missing" mnemonicParsing="false" text="Missing/Incorrect" />
-                     <MenuItem id="Key-Exists" mnemonicParsing="false" text="Drawing Exists" />
+                     <MenuItem id="Key-Exists" mnemonicParsing="false" text="Drawing Exists / NEW" />
                      <MenuItem id="Key-DoesntExist" mnemonicParsing="false" text="Drawing Doesnt Exist" />
                  </items>
                </Menu>
-           <MenuItem mnemonicParsing="false" text="About" />
+           <MenuItem fx:id="aboutButton" mnemonicParsing="false" onAction="#aboutButtonClicked" text="About" />
          </items>
        </Menu>
      </menus>
@@ -45,6 +45,7 @@
                   <children>
                      <Button fx:id="leftSelectFile" mnemonicParsing="false" onAction="#leftSelectFileClicked" text="Select File" />
                      <Button fx:id="leftClipboard" mnemonicParsing="false" onAction="#leftClipboardClicked" text="Clipboard" />
+                     <Button fx:id="leftClearButton" mnemonicParsing="false" onAction="#clearLeftData" text="Clear" />
                      <Region HBox.hgrow="ALWAYS" />
                      <MenuButton fx:id="leftDefaultLayoutMenu" maxWidth="220.0" minWidth="220.0" mnemonicParsing="false" text="MenuButton" />
                   </children>
@@ -65,6 +66,7 @@
                   <children>
                      <Button fx:id="rightSelectFile" mnemonicParsing="false" onAction="#rightSelectFileClicked" text="Select File" />
                      <Button fx:id="rightClipboard" mnemonicParsing="false" onAction="#rightClipboardClicked" text="Clipboard" />
+                     <Button fx:id="rightClearButton" mnemonicParsing="false" onAction="#clearRightData" text="Clear" />
                      <Region HBox.hgrow="ALWAYS" />
                      <MenuButton fx:id="rightDefaultLayoutMenu" maxWidth="220.0" minWidth="220.0" mnemonicParsing="false" text="MenuButton" />
                   </children>

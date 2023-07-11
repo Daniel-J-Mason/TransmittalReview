@@ -26,7 +26,7 @@ public class Drawing implements Part{
         StringBuilder fileName = new StringBuilder();
         fileName.append(getPartNumber());
         if (getRevisionLevel() != null) {
-            fileName.append("_").append(getRevisionLevel()).append(".pdf");
+            fileName.append("_REV_").append(getRevisionLevel()).append(".pdf");
         } else {
             fileName.append(".pdf");
         }

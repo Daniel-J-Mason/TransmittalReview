@@ -6,11 +6,18 @@ import com.example.transmittalreview.model.entities.Dxf;
 import com.example.transmittalreview.model.entities.Part;
 import lombok.Builder;
 import lombok.Data;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbookFactory;
-
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,7 +53,8 @@ public class TransmittalService {
     private Workbook workbookFromFile(File transmittal) {
         Workbook workbook = null;
         try {
-            workbook = XSSFWorkbookFactory.createWorkbook(transmittal, true);
+            OPCPackage opcPackage = OPCPackage.open(transmittal);
+            workbook = new XSSFWorkbook(opcPackage);
             workbook.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -69,7 +77,7 @@ public class TransmittalService {
         
         boolean isNew = false;
         
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 26; i++) {
             if (stringFromCell(row.getCell(i)).contains("NEW")) {
                 isNew = true;
             }
@@ -96,7 +104,7 @@ public class TransmittalService {
         
         boolean isNew = false;
         
-        for (int i = 1; i < 8; i++) {
+        for (int i = 1; i < 26; i++) {
             if (stringFromCell(row.getCell(i)).contains("NEW")) {
                 isNew = true;
             }
@@ -111,12 +119,9 @@ public class TransmittalService {
     }
     
     private String stringFromCell(Cell cell) {
-        return switch (cell.getCellType()) {
-            case NUMERIC -> String.valueOf(cell.getNumericCellValue());
-            case STRING -> cell.getStringCellValue();
-            case FORMULA -> cell.getRichStringCellValue().toString();
-            default -> "";
-        };
+        DataFormatter formatter = new DataFormatter();
+        formatter.setUseCachedValuesForFormulaCells(true);
+        return formatter.formatCellValue(cell);
     }
     
     private List<Part> generateSheetPartsList(Map<Integer, String> combinedRowList, Sheet sheet){

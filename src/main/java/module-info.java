@@ -3,11 +3,9 @@ module com.example.transmittalreview {
     requires javafx.fxml;
     requires javafx.graphics;
     requires static lombok;
-    
-    requires org.controlsfx.controls;
     requires com.google.gson;
-    requires poi;
-    requires poi.ooxml;
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
     
     exports com.example.transmittalreview;
     exports com.example.transmittalreview.controllers;
@@ -20,4 +18,6 @@ module com.example.transmittalreview {
     opens com.example.transmittalreview to javafx.fxml;
     opens com.example.transmittalreview.controllers to javafx.fxml;
     opens com.example.transmittalreview.model.entities to com.google.gson;
+    exports com.example.transmittalreview.application;
+    opens com.example.transmittalreview.application to javafx.fxml;
 }

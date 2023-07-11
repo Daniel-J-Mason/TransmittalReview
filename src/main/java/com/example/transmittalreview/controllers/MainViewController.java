@@ -1,7 +1,8 @@
 package com.example.transmittalreview.controllers;
 
 import com.example.transmittalreview.controllers.components.TablePart;
-import com.example.transmittalreview.model.dao.*;
+import com.example.transmittalreview.model.dao.ApplicationSettings;
+import com.example.transmittalreview.model.dao.TransmittalSettings;
 import com.example.transmittalreview.model.entities.Drawing;
 import com.example.transmittalreview.model.entities.Dxf;
 import com.example.transmittalreview.model.entities.Part;
@@ -52,7 +53,7 @@ public class MainViewController {
     public VBox mainBox;
     public MenuButton leftDefaultLayoutMenu;
     public MenuButton rightDefaultLayoutMenu;
-    
+
     private ApplicationSettings applicationSettings;
     private TransmittalSettings leftTransmittalSettings;
     private TransmittalSettings rightTransmittalSettings;
@@ -62,6 +63,7 @@ public class MainViewController {
     private final ObservableList<TablePart> rightData = FXCollections.observableArrayList();
     private final Clipboard clipboard = Clipboard.getSystemClipboard();
     private HostServices hostServices;
+    private String lastFolder;
     
     public void initialize() {
         initializeTables();
@@ -70,7 +72,11 @@ public class MainViewController {
         setupRowColors();
         setUpMenuBars();
     }
-    
+
+    public void aboutButtonClicked(ActionEvent actionEvent) {
+        hostServices.showDocument(applicationSettings.getHelpFolder());
+    }
+
     public void leftClipboardClicked(ActionEvent actionEvent) {
         String clipboardData = clipboard.getString();
         leftBom = new BOMService(clipboardData).getParts();
@@ -117,6 +123,18 @@ public class MainViewController {
         }
         
         rightPartNumberColumn.setText(file.getName());
+        updateTableStatuses();
+    }
+    
+    public void clearLeftData(ActionEvent actionEvent) {
+        leftBom.clear();
+        leftPartNumberColumn.setText("Part Number");
+        updateTableStatuses();
+    }
+    
+    public void clearRightData(ActionEvent actionEvent) {
+        rightBom.clear();
+        rightPartNumberColumn.setText("Part Number");
         updateTableStatuses();
     }
     
@@ -176,6 +194,9 @@ public class MainViewController {
     private void setUpMenuBars(){
         leftDefaultLayoutMenu.setText(applicationSettings.getDefaultTransmittalLayout());
         rightDefaultLayoutMenu.setText(applicationSettings.getDefaultTransmittalLayout());
+
+        leftDefaultLayoutMenu.getItems().clear();
+        rightDefaultLayoutMenu.getItems().clear();
 
         leftDefaultLayoutMenu.getItems().addAll(localTransmittalLayouts(leftDefaultLayoutMenu));
         rightDefaultLayoutMenu.getItems().addAll(localTransmittalLayouts(rightDefaultLayoutMenu));
@@ -268,8 +289,10 @@ public class MainViewController {
                     Part part = tablePart.getPart();
                     File temp = new File(partLink(part));
                     pseudoClassStateChanged(missing, !temp.exists() && !part.isNew());
-                    if(!part.isNew()) {
-                        addEventHandler(MouseEvent.MOUSE_PRESSED, hyperLinkHandler(tablePart));
+                    if (!part.isNew()){
+                        setEventHandler(MouseEvent.MOUSE_PRESSED, hyperLinkHandler(tablePart));
+                    } else {
+                        setEventHandler(MouseEvent.MOUSE_PRESSED, null);
                     }
                 }
                 switch (tablePart.getStatus()) {
@@ -289,6 +312,7 @@ public class MainViewController {
             } else if (event.isSecondaryButtonDown()) {
                 File file = new File(partLink(tablePart.getPart()));
                 hostServices.showDocument(file.getParent());
+                System.out.println("Secondary");
             }
         };
     }
@@ -310,13 +334,22 @@ public class MainViewController {
     
     private File fileFromChooser() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Transmittal");
+        fileChooser.setTitle("Select Transmittal or BOM file");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Excel/BOM Files", "*.xlsm", "*.bom.*"),
                 new FileChooser.ExtensionFilter("All files", "*.*")
         );
-        
-        return fileChooser.showOpenDialog(null);
+        if (lastFolder != null){
+            fileChooser.setInitialDirectory(new File(lastFolder));
+        }
+
+        File resultFile = fileChooser.showOpenDialog(null);
+
+        if (resultFile != null) {
+            lastFolder = resultFile.getAbsoluteFile().getParentFile().getAbsolutePath();
+            System.out.println(lastFolder);
+        }
+        return resultFile;
     }
     
     
@@ -344,7 +377,9 @@ public class MainViewController {
         Stage dialog = new Stage();
         dialog.setTitle("Settings");
         dialog.setScene(scene);
-        dialog.getIcons().add(new Image(Objects.requireNonNull(SettingsViewController.class.getResourceAsStream("images/Transmittal-logo.ico"))));
+        dialog.getIcons().add(
+                new Image(Objects.requireNonNull(
+                        SettingsViewController.class.getResourceAsStream("images/Transmittal-logo-128.png"))));
         dialog.show();
     }
 }

@@ -49,6 +49,8 @@ public class BOMService {
                 contentBuilder.append(line).append("\\n");
                 line = reader.readLine();
             }
+            
+            reader.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

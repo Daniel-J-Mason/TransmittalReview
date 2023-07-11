@@ -1,4 +1,4 @@
-package com.example.transmittalreview;
+package com.example.transmittalreview.application;
 
 import com.example.transmittalreview.controllers.MainViewController;
 import javafx.application.Application;
@@ -20,7 +20,7 @@ public class TransmittalReviewApplication extends Application {
         
         stage.setTitle("Transmittal Review");
         stage.setScene(scene);
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("images/Transmittal-logo.ico"))));
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("images/Transmittal-logo-128.png"))));
         stage.show();
     }
     

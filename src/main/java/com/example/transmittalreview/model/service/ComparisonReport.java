@@ -23,7 +23,9 @@ public class ComparisonReport {
                         .filter(part1 -> part1.getPartNumber().equalsIgnoreCase(part.getPartNumber()))
                         .toList()
                         .get(0);
-                part.setIsNew(comparisonPart.isNew());
+                if (comparisonPart.isNew()){
+                    part.setIsNew(comparisonPart.isNew());
+                }
             }
         }
         

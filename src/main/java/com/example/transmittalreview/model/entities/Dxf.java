@@ -28,7 +28,8 @@ public class Dxf implements Part {
     public String getFileName(){
         StringBuilder fileName = new StringBuilder();
         fileName.append(getDxfNumber());
-        if (getRevisionLevel() != null) fileName.append("_").append(getRevisionLevel()).append(".dxf");
+        if (getRevisionLevel() != null) fileName.append("_REV_").append(getRevisionLevel());
+        fileName.append(".dxf");
         
         return fileName.toString();
     }
