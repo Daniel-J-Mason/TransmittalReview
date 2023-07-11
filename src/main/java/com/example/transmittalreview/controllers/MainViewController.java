@@ -73,11 +73,11 @@ public class MainViewController {
         setUpMenuBars();
     }
 
-    public void aboutButtonClicked(ActionEvent actionEvent) {
+    public void aboutButtonClicked() {
         hostServices.showDocument(applicationSettings.getHelpFolder());
     }
 
-    public void leftClipboardClicked(ActionEvent actionEvent) {
+    public void leftClipboardClicked() {
         String clipboardData = clipboard.getString();
         leftBom = new BOMService(clipboardData).getParts();
         
@@ -86,7 +86,7 @@ public class MainViewController {
         leftPartNumberColumn.setText("Clipboard");
     }
     
-    public void rightClipboardClicked(ActionEvent actionEvent) {
+    public void rightClipboardClicked() {
         String clipboardData = clipboard.getString();
         rightBom = new BOMService(clipboardData).getParts();
         
@@ -95,7 +95,7 @@ public class MainViewController {
         rightPartNumberColumn.setText("Clipboard");
     }
     
-    public void leftSelectFileClicked(ActionEvent actionEvent) {
+    public void leftSelectFileClicked() {
         File file = fileFromChooser();
         
         if (file == null) return;
@@ -111,7 +111,7 @@ public class MainViewController {
     }
     
     
-    public void rightSelectFileClicked(ActionEvent actionEvent) {
+    public void rightSelectFileClicked() {
         File file = fileFromChooser();
         
         if (file == null) return;
@@ -126,13 +126,13 @@ public class MainViewController {
         updateTableStatuses();
     }
     
-    public void clearLeftData(ActionEvent actionEvent) {
+    public void clearLeftData() {
         leftBom.clear();
         leftPartNumberColumn.setText("Part Number");
         updateTableStatuses();
     }
     
-    public void clearRightData(ActionEvent actionEvent) {
+    public void clearRightData() {
         rightBom.clear();
         rightPartNumberColumn.setText("Part Number");
         updateTableStatuses();
@@ -178,10 +178,10 @@ public class MainViewController {
                             applicationSettings.getDefaultTransmittalLayout()));
             if (applicationSettings.isDarkMode()) {
                 mainBox.getStylesheets().clear();
-                mainBox.getStylesheets().add(getClass().getResource("styles/dark-theme.css").toExternalForm());
+                mainBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("styles/dark-theme.css")).toExternalForm());
             } else {
                 mainBox.getStylesheets().clear();
-                mainBox.getStylesheets().add(getClass().getResource("styles/light-theme.css").toExternalForm());
+                mainBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("styles/light-theme.css")).toExternalForm());
             }
         }
     }
@@ -212,7 +212,7 @@ public class MainViewController {
     
     private List<MenuItem> localTransmittalLayouts(MenuButton belongsTo){
         File current = new File(".");
-        return Arrays.stream(current.listFiles())
+        return Arrays.stream(Objects.requireNonNull(current.listFiles()))
                 .filter(
                         element -> element.getName().endsWith(".json")
                                 && !element.getName().equalsIgnoreCase("settings.json"))
@@ -362,7 +362,7 @@ public class MainViewController {
         this.hostServices = hostServices;
     }
     
-    public void settingsButtonClicked(ActionEvent actionEvent) throws IOException {
+    public void settingsButtonClicked() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("settings.fxml"));
         Parent parent = fxmlLoader.load();
         SettingsViewController controller = fxmlLoader.getController();
