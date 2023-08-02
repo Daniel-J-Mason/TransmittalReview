@@ -225,6 +225,7 @@ public class MainViewController {
         menuItem.setOnAction(
                 actionEvent -> belongsTo.setText(text)
         );
+        menuItem.setMnemonicParsing(false);
         return menuItem;
     }
     
